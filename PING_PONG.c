@@ -28,23 +28,50 @@ struct score {
     int sc;
 } l_score, r_score;
 
-// Array to store recent scores from past games
-char recentScores[3][100];
+// Function declarations
+int displayMenu();
 
-// Character array to store the text representation of the score
-char scoreText[15];
+char recentScores[3][100]; // Array to store recent scores from past games
+char scoreText[15]; // Character array to store the text representation of the score
+char authorName[25]; // Character array to store the name of the game's author
+char gameTitle[50]; // Character array to store the title of the game
+int scoreIndex = 0; // Integer to track the index of the current score in the recentScores array
+int mode; // Integer to track the current game mode (e.g., single player, multiplayer)
+int difficulty; // Integer to track the difficulty level of the game (e.g., easy, medium, hard)
 
-// Character array to store the name of the game's author
-char authorName[25];
+int main() {
+    int gd = DETECT, gm;  // 'gd' and 'gm' are variables to hold graphics drivers and mode. DETECT allows automatic detection of graphics driver.
+    srand(time(NULL));
+    
+    // Initialize the graphics mode by specifying the path to the BGI (Borland Graphics Interface) files in Turbo C++
+    initgraph(&gd, &gm, "C:/TURBOC3/bgi");
+    mode = displayMenu();
+    return 0;
+}
 
-// Character array to store the title of the game
-char gameTitle[50];
 
-// Integer to track the index of the current score in the recentScores array
-int scoreIndex = 0;
+int displayMenu() {
+    char choice;
+    while (1) {
+        cleardevice();  // Clears the screen
+        
+        // Set the text style and display the menu options
+        settextstyle(3, HORIZ_DIR, 3); // Font size 3, horizontal direction
+        outtextxy(100, 100, "Choose Mode:");
+        outtextxy(100, 150, "1. Play against AI");
+        outtextxy(100, 200, "2. Play with a friend");
 
-// Integer to track the current game mode (e.g., single player, multiplayer)
-int mode;  
+        choice = getch();  // Capture the user's input
 
-// Integer to track the difficulty level of the game (e.g., easy, medium, hard)
-int difficulty;
+        if (choice == '1') {
+            return 1;  // Single-player mode selected
+        } else if (choice == '2') {
+            return 2;  // Two-player mode selected
+        } else {
+            // If an invalid input is given, show "Invalid input" and re-display the menu
+            outtextxy(100, 250, "Invalid input. Please choose again.");
+            delay(1000);  // Wait for a second
+            displayMenu();
+        }
+    }
+}
