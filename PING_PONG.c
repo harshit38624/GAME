@@ -30,7 +30,7 @@ struct score {
 
 // Function declarations
 int displayMenu();
-
+void initialize();
 char recentScores[3][100]; // Array to store recent scores from past games
 char scoreText[15]; // Character array to store the text representation of the score
 char authorName[25]; // Character array to store the name of the game's author
@@ -74,4 +74,49 @@ int displayMenu() {
             displayMenu();
         }
     }
+}
+
+
+void initialize() {
+
+    cleardevice();
+
+    // Initialize ball properties: center position on the screen, radius, and speed in both x and y directions
+    ball.xAxis = getmaxx() / 2;  
+    ball.yAxis = getmaxy() / 2;  
+    ball.radius = 7;  
+    ball.xSpeed = 7;  
+    ball.ySpeed = 9;  
+
+    // Initialize left bat (paddle) properties: position, size, and speed
+    l_bat.xAxis = 20;  
+    l_bat.yAxis = 237;  
+    l_bat.length = 60; 
+    l_bat.width = 4;  
+    l_bat.speed = 13;  
+
+    // Initialize right bat (paddle) properties: position, size, and speed
+    r_bat.xAxis = 620;  
+    r_bat.yAxis = 237;  
+    r_bat.length = 60;  
+    r_bat.width = 4;  
+    r_bat.speed = 13;  
+
+    // Reset scores for both players
+    l_score.sc = 0;  
+    r_score.sc = 0;  
+
+    // Set the background color of the screen to green
+    setbkcolor(GREEN);  
+
+    // Set the font style and size for the game title text
+    settextstyle(8, HORIZ_DIR, 6);  // Set the text style with font 8, horizontal direction, and size 6
+
+    // Display the game title "PING PONG GAME" on the screen
+    sprintf(gameTitle, "PING PONG GAME");  // Format the game title into the string
+    outtextxy(60, (getmaxy() / 2) - 75, gameTitle);  // Display the game title at specified coordinates
+
+    // Pause the screen for 2 seconds to show the title
+    delay(2000);  
+
 }
