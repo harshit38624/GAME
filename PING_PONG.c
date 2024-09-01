@@ -120,7 +120,7 @@ void initialize() {
     delay(2000);  
 
     while (1) {  
-        
+
         cleardevice();
 
         // Display the scores of both players
@@ -178,5 +178,56 @@ void initialize() {
         ball.yAxis = ball.yAxis + ball.ySpeed;  // Move the ball vertically
     }
 
+    // Draw the left bat (player A) as a filled rectangle
+    bar(l_bat.xAxis, l_bat.yAxis, l_bat.xAxis + l_bat.width, l_bat.yAxis + l_bat.length);
+
+    // Draw the right bat (player B) as a filled rectangle
+    bar(r_bat.xAxis, r_bat.yAxis, r_bat.xAxis + r_bat.width, r_bat.yAxis + r_bat.length);
+
+    // Check for collision with the left bat
+    if ((l_bat.yAxis + l_bat.length) > ball.yAxis &&  // Ball is within the vertical bounds of the left bat
+        (ball.yAxis > l_bat.yAxis) &&                   // Ball is below the top edge of the left bat
+        (l_bat.xAxis + l_bat.width + 4) > ball.xAxis) { // Ball is within the horizontal bounds of the left bat
+        ball.xSpeed *= -1;  // Reverse the ball's horizontal direction
+        setbkcolor(BLUE);   
+        sound(200);         
+        delay(50);          
+        nosound();         
+    }
+
+    // Check for collision with the right bat
+    if ((r_bat.yAxis + r_bat.length) > ball.yAxis &&  // Ball is within the vertical bounds of the right bat
+        r_bat.yAxis < ball.yAxis &&                   // Ball is below the top edge of the right bat
+        r_bat.xAxis - 4 < ball.xAxis) {               // Ball is within the horizontal bounds of the right bat
+        ball.xSpeed *= -1;  // Reverse the ball's horizontal direction
+        setbkcolor(RED);    
+        sound(200);         
+        delay(50);          
+        nosound();         
+    }
+
+    // Check if a key has been pressed
+    if (kbhit()) {
+        char c = getch();  // Get the pressed key
+
+        // Control for the left bat (player A)
+        if (c == 'z' && l_bat.yAxis + l_bat.length <= 440) {  // If 'z' is pressed and the left bat can move down
+            l_bat.yAxis = l_bat.yAxis + l_bat.speed;  
+        } else if (c == 'a' && l_bat.yAxis >= 0) {  // If 'a' is pressed and the left bat can move up
+            l_bat.yAxis = l_bat.yAxis - l_bat.speed;  
+        }
+
+        // Control for the right bat (player B) - only if playing in two-player mode
+        if (mode == 2) {
+            if (c == 'm' && r_bat.yAxis + r_bat.length <= 440) {  // If 'm' is pressed and the right bat can move down
+                r_bat.yAxis = r_bat.yAxis + r_bat.speed;  
+            } else if (c == 'k' && r_bat.yAxis >= 0) {  // If 'k' is pressed and the right bat can move up
+                r_bat.yAxis = r_bat.yAxis - r_bat.speed;  
+            }
+        }
+    }
+
+
+    
 
 }
