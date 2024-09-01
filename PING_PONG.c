@@ -119,4 +119,64 @@ void initialize() {
     // Pause the screen for 2 seconds to show the title
     delay(2000);  
 
+    while (1) {  
+        
+        cleardevice();
+
+        // Display the scores of both players
+        settextstyle(0, HORIZ_DIR, 1);  
+        sprintf(scoreText, "A - %d", l_score.sc);
+        outtextxy(10, 450, scoreText);  // Display player A's score at (10, 450)
+        sprintf(scoreText, "B - %d", r_score.sc); 
+        outtextxy(560, 450, scoreText);  // Display player B's score at (560, 450)
+
+        // Display author information at the bottom center of the screen
+        settextstyle(3, HORIZ_DIR, 2);
+        sprintf(authorName, "Made BY Harshit Behal");  
+        outtextxy(getmaxx() / 2 - 115, 450, authorName);  // Display author name centered at the bottom
+
+        // Draw the line at the bottom of the screen (court boundary)
+        bar(0, 443, getmaxx(), 443);
+
+        // Check if the ball passes the left paddle (player A's side)
+        if (ball.xAxis < l_bat.xAxis) {
+            // Reset ball and paddles to the center if player A misses
+            ball.xAxis = getmaxx() / 2;  // Reset ball to the center horizontally
+            ball.yAxis = getmaxy() / 2;  // Reset ball to the center vertically
+            r_bat.yAxis = getmaxy() / 2;  // Reset right bat (player B) to the center vertically
+            l_bat.yAxis = getmaxy() / 2;  // Reset left bat (player A) to the center vertically
+            r_score.sc++;  // Increment player B's score
+
+            // Play a sound effect to indicate a point
+            sound(1000);  
+            delay(75);  
+            nosound();  
+        }
+
+        // Check if the ball passes the right paddle (player B's side)
+        if (ball.xAxis > r_bat.xAxis + r_bat.width) {
+            // Reset ball and paddles to the center if player B misses
+            ball.xAxis = getmaxx() / 2;  // Reset ball to the center horizontally
+            ball.yAxis = getmaxy() / 2;  // Reset ball to the center vertically
+            r_bat.yAxis = getmaxy() / 2;  // Reset right bat (player B) to the center vertically
+            l_bat.yAxis = getmaxy() / 2;  // Reset left bat (player A) to the center vertically
+            l_score.sc++;  // Increment player A's score
+
+            // Play a sound effect to indicate a point
+            sound(1000);
+            delay(75);
+            nosound();
+        }
+
+        // Check if the ball hits the top or bottom edge of the screen
+        if (ball.yAxis < 0 || ball.yAxis > 434) {
+            ball.ySpeed *= -1;  // Reverse the ball's vertical direction
+        }
+
+        // Update the ball's position based on its speed
+        ball.xAxis = ball.xAxis + ball.xSpeed;  // Move the ball horizontally
+        ball.yAxis = ball.yAxis + ball.ySpeed;  // Move the ball vertically
+    }
+
+
 }
