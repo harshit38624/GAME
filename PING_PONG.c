@@ -109,6 +109,38 @@ int chooseDifficulty() {
     }
 }
 
+void aiMovement() {
+
+    int randomError = rand() % 100;  // Generate a random number between 0 and 99 to simulate AI errors
+    int distanceThreshold = 70;  // Threshold distance to decide when AI should start reacting to the ball
+
+    // If the ball is within the AI's range (near the right bat)
+    if (abs(ball.xAxis - r_bat.xAxis) < distanceThreshold) {
+        switch (difficulty) {
+            case 1:  // Easy difficulty
+                if (randomError <= 80) return;  // 80% chance of making a mistake (ignoring the ball)
+                break;
+            case 2:  // Medium difficulty
+                if (randomError <= 60) return;  // 60% chance of making a mistake
+                break;
+            case 3:  // Hard difficulty
+                if (randomError <= 40) return;  // 40% chance of making a small mistake
+                break;
+        }
+    }
+
+    // Move the AI paddle to follow the ball
+    // If the ball is above the AI paddle, move the paddle up
+    if (ball.yAxis < r_bat.yAxis + (r_bat.length / 2)) {
+        if (r_bat.yAxis > 0) r_bat.yAxis -= r_bat.speed;  // Move the paddle up if it's not at the top edge
+    }
+    // If the ball is below the AI paddle, move the paddle down
+    else if (ball.yAxis > r_bat.yAxis + (r_bat.length / 2)) {
+        if (r_bat.yAxis + r_bat.length < 440) r_bat.yAxis += r_bat.speed;  // Move the paddle down if it's not at the bottom edge
+    }
+    
+}
+
 void initialize() {
 
     cleardevice();
@@ -239,7 +271,7 @@ void initialize() {
     }
 
     if (mode == 1) {  // If playing against AI
-        //aiMovement();
+        aiMovement();
     }
 
     // Check if a key has been pressed
