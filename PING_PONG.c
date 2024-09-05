@@ -36,11 +36,17 @@ int scoreIndex = 0; // Integer to track the index of the current score in the re
 int mode; // Integer to track the current game mode (e.g., single player, multiplayer)
 int difficulty; // Integer to track the difficulty level of the game (e.g., easy, medium, hard)
 
+// New global variables for FPS tracking
+clock_t lastTime = 0;
+int frameCount = 0;
+float fps = 0.0f;
+
 // Function declarations
 int displayMenu();
 int chooseDifficulty();
 void initialize();
 void aiMovement();
+void updateFPS();
 
 int main() {
     int gd = DETECT, gm; // 'gd' and 'gm' are variables to hold graphics drivers and mode. DETECT allows automatic detection of graphics driver.
@@ -54,6 +60,26 @@ int main() {
     initialize();
     closegraph(); // Close the graphics window and clean up resources
     return 0;
+}
+
+void updateFPS() {
+    clock_t currentTime;
+    float deltaTime;
+    char fpsText[20];
+    frameCount++;
+    currentTime = clock();
+    deltaTime = (float)(currentTime - lastTime) / CLOCKS_PER_SEC;
+
+    if (deltaTime >= 1.0f) {
+        fps = frameCount / deltaTime;
+        frameCount = 0;
+        lastTime = currentTime;
+    }
+
+    sprintf(fpsText, "FPS: %.1f", fps);
+    setcolor(WHITE);
+    settextstyle(DEFAULT_FONT, HORIZ_DIR, 1);
+    outtextxy(getmaxx() - textwidth(fpsText) - 10, 10, fpsText);
 }
 
 int displayMenu() {
@@ -172,7 +198,9 @@ void initialize() {
     delay(2000);
 
     while (1) {
+
         cleardevice();
+
 
         // Display the scores of both players
         settextstyle(0, HORIZ_DIR, 1);
@@ -253,6 +281,8 @@ void initialize() {
             nosound();
         }
 
+        updateFPS();
+        
         if (mode == 1) {  // If playing against AI
             aiMovement();
         }
@@ -268,6 +298,7 @@ void initialize() {
                 l_bat.yAxis = l_bat.yAxis - l_bat.speed;
             }
 
+
             // Control for the right bat (only in two-player mode)
             if (mode == 2) {
                 if (c == 'm' && r_bat.yAxis + r_bat.length <= 440) {  // 'm' key
@@ -276,6 +307,7 @@ void initialize() {
                     r_bat.yAxis = r_bat.yAxis - r_bat.speed;
                 }
             }
+
 
             // Check for quit
             if (c == 'q') {
