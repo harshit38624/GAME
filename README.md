@@ -1,6 +1,6 @@
 # GAME
 # Ping Pong Game
-
+![Ping Pong Game Screenshot](./Game.png)
 ## Table of Contents
 1. [Introduction](#introduction)
 2. [Features](#features)
