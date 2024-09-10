@@ -11,9 +11,8 @@
 6. [Installation](#installation)
 7. [How to Play](#how-to-play)
 8. [Limitations](#limitations)
-9. [Future Improvements](#future-improvements)
-10. [Troubleshooting](#troubleshooting)
-11. [Credits](#credits)
+9. [Troubleshooting](#troubleshooting)
+10. [Credits](#credits)
 
 ## Introduction
 
